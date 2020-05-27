@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{%  block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"/>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="jumbotron">
+            <h1 class="display-4">Instituto Cultiva</h1>
+            <p class="lead">Gerador de Certificados</p>
+            <hr class="my-4">
+            <p>Sistema para geração de certificados dos cursos do Instituto Cultiva</p>
+            <a class="btn btn-primary btn-lg" href="https://github.com/tiagocordeiro/cultiva-certificados"
+               role="button" target="_blank">
+                <i class="fab fa-github"></i> Github
+            </a>
+        </div>
+    </div>
+{% endblock content %}
