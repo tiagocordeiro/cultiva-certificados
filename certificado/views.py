@@ -63,13 +63,20 @@ def link_certificado(request, pk, slug):
     pass
 
 
-def download_certificado(request, pk, slug):
-    dados_certificado = gera_certificado(pk=pk, slug=slug)
+def download_certificado(request, pk, slug, img_format='jpg'):
+    if img_format == 'png':
+        img_format = ['PNG', 'png']
+    else:
+        img_format = ['JPEG', 'jpg']
+
+    cert_dados = gera_certificado(pk=pk, slug=slug)
     byte = BytesIO()
 
-    dados_certificado.image.save(byte, 'JPEG')
+    cert_dados.image.save(byte, img_format[0])
     byte.seek(0)
 
+    filename = f'{cert_dados.file_name}-{cert_dados.data}.{img_format[1]}'
+
     response = FileResponse(byte, 'rb')
-    response['Content-Disposition'] = f'attachment; filename={dados_certificado.file_name}-{dados_certificado.data}.jpg'
+    response['Content-Disposition'] = f'attachment; filename={filename}'
     return response
