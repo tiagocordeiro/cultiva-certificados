@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
+import django_heroku
 from decouple import config, Csv
 from dj_database_url import parse as dburl
 
@@ -121,3 +122,11 @@ LOGIN_REDIRECT_URL = '/'
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Configure Django App for Heroku.
+django_heroku.settings(locals())
+
+# Force ssl if run in Heroku
+if 'DYNO' in os.environ:
+    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
