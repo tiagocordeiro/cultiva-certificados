@@ -12,5 +12,8 @@ urlpatterns = [
     path('certificado/<pk>/<slug>/', views.link_certificado,
          name='link_certificado'),
     path('certificado/download/<pk>/<slug>/', views.download_certificado,
-         name='download_certificado')
+         name='download_certificado'),
+    path('certificado/download/<pk>/<slug>/<img_format>',
+         views.download_certificado,
+         name='download_certificado_png')
 ]
