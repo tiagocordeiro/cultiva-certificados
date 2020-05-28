@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}Certificados{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"/>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col md-6">
+                <h2>Certificados</h2>
+            </div>
+            <div class="col md-6">
+                <a href="{% url 'novo_certificado' %}" class="btn btn-success float-right"><i class="fas fa-plus-circle"></i> Novo</a>
+            </div>
+        </div>
+        <div class="row">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="col-12">
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ message|safe }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table">
+                    <caption>Certificados</caption>
+                    <thead>
+                    <tr>
+                        <th scope="col">Aluno</th>
+                        <th scope="col">Curso</th>
+                        <th scope="col" style="text-align: center;">Parceiro</th>
+                        <th scope="col" style="text-align: center;">Data</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for certificado in certificados %}
+                        <tr>
+                            <th class="align-middle" style="white-space: nowrap;" scope="row">{{ certificado.aluno }}</th>
+                            <td class="align-middle">{{ certificado.curso }}</td>
+                            <td class="align-middle" style="white-space: nowrap; text-align: center;">{{ certificado.get_parceria_display }}</td>
+                            <td class="align-middle" style="white-space: nowrap; text-align: center;">{{ certificado.data }}</td>
+                            <td class="align-middle" style="white-space: nowrap; text-align: right;">
+                                <a href="{% url 'atualiza_certificado' pk=certificado.pk %}" class="btn btn-sm btn-outline-info" role="button" aria-pressed="true" data-toggle="tooltip" data-placement="top" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="{% url 'compartilhar_certificado' pk=certificado.pk %}" class="btn btn-sm btn-outline-info" role="button" aria-pressed="true" data-toggle="tooltip" data-placement="top" title="Compartilhar">
+                                    <i class="fas fa-share"></i>
+                                </a>
+                                <a href="{% url 'link_certificado' pk=certificado.pk slug=certificado.slug %}" class="btn btn-sm btn-outline-info" role="button" aria-pressed="true" data-toggle="tooltip" data-placement="top" title="Link">
+                                    <i class="fas fa-link"></i>
+                                </a>
+                                <a href="{% url 'download_certificado' pk=certificado.pk slug=certificado.slug %}" class="btn btn-sm btn-outline-info" role="button" aria-pressed="true" data-toggle="tooltip" data-placement="top" title="Download">
+                                    <i class="fas fa-file-download"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                {#                {% if certificados.has_other_pages %}#}
+                <nav aria-label="Search results pages">
+                    <ul class="pagination">
+                        {% if certificados.has_previous %}
+                            <li class="page-item"><a class="page-link" href="?page={{ certificados.previous_page_number }}">&laquo;</a>
+                            </li>
+                        {% else %}
+                            <li class="disabled page-item"><span class="page-link">&laquo;</span></li>
+                        {% endif %}
+                        {% for i in certificados.paginator.page_range %}
+                            {% if certificados.number == i %}
+                                <li class="active page-item"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span>
+                                </li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if certificados.has_next %}
+                            <li class="page-item"><a class="page-link" href="?page={{ certificados.next_page_number }}">&raquo;</a>
+                            </li>
+                        {% else %}
+                            <li class="disabled page-item"><span class="page-link">&raquo;</span></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {#                {% endif %}#}
+
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+{% block extra_js %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Novo Certificado{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"/>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <h2>Novo Certificado</h2>
+        </div>
+        <div class="row">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="col-12">
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ message|safe }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            {% if form.errors %}
+                <div class="col-12">
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ form.errors }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="id_aluno">Aluno</label>
+                    {{ form.aluno }}
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="id_rg">RG</label>
+                    {{ form.rg }}
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="id_cpf">CPF</label>
+                    {{ form.cpf }}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-12">
+                    <label for="id_curso">Curso</label>
+                    {{ form.curso }}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label for="id_data">Data</label>
+                    {{ form.data }}
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="id_carga_horaria">Carga horária</label>
+                    {{ form.carga_horaria }}
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="id_universidade">Universidade</label>
+                    {{ form.universidade }}
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="id_parceria">Parceria</label>
+                    {{ form.parceria }}
+                </div>
+            </div>
+            <button class="btn btn-success mt-2 mb-4"><i class="far fa-save"></i> Salvar</button>
+        </form>
+
+    </div>
+{% endblock content %}
+{% block extra_js %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/4.0.9/jquery.inputmask.bundle.min.js" integrity="sha256-O4r2M4p1dxfVFgKvwK23D1RQdTU8ABlIBir9aGP+KJY=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            $("#id_data").inputmask("99/99/9999", {"placeholder": "DD/MM/AAAA"});
+            $("#id_rg").inputmask("99.999.999[-A]", {"placeholder": "00.000.000-X"});
+            $("#id_cpf").inputmask("999.999.999-99", {"placeholder": "000.000.000-00"});
+        });
+    </script>
+
+{% endblock %}
