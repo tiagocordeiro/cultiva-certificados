@@ -1,8 +1,12 @@
+from io import BytesIO
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.http import FileResponse
 from django.shortcuts import redirect, render
 
+from .facade import gera_certificado
 from .forms import CertificadoForm
 from .models import Certificado
 
@@ -60,4 +64,12 @@ def link_certificado(request, pk, slug):
 
 
 def download_certificado(request, pk, slug):
-    pass
+    dados_certificado = gera_certificado(pk=pk, slug=slug)
+    byte = BytesIO()
+
+    dados_certificado.image.save(byte, 'JPEG')
+    byte.seek(0)
+
+    response = FileResponse(byte, 'rb')
+    response['Content-Disposition'] = f'attachment; filename={dados_certificado.file_name}-{dados_certificado.data}.jpg'
+    return response
