@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Instituto Cultiva • Certificado</title>
+    <meta property="og:title" content="{{ certificado.curso }}"/>
+    <meta property="og:description" content="Emitido em {{ certificado.data }} com carga horária de {{ certificado.carga_horaria }}h"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:site_name" content="Instituto Cultiva">
+    <meta property="og:url" content="{{ url }}"/>
+    <meta property="og:image" content="{% static "favicon.png" %}"/>
+
+    <!-- ==== Favicon ==== -->
+    <link rel="icon" href="{% static "favicon.png" %}" type="image/png">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"/>
+
+    <style>
+        .card {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .container {
+            padding: 2px 16px;
+        }
+
+        .card-img-caption {
+            border-top-left-radius: calc(.25rem - 1px);
+            border-top-right-radius: calc(.25rem - 1px);
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row d-flex justify-content-center">
+        <div class="col d-flex justify-content-center">
+            <div class="card" style="max-width: 480px">
+                <div class="card-img-caption">
+                    <img class="card-img-top" src="{% url 'download_certificado' pk=certificado.pk slug=certificado.slug %}" alt="Certificado" style="width:100%">
+                </div>
+                <div class="container d-flex justify-content-around">
+                    <a target="_blank" class="btn btn-success my-4" href="{% url 'download_certificado' pk=certificado.pk slug=certificado.slug %}" role="button"><i class="fas fa-cloud-download-alt"></i>
+                        Download
+                    </a>
+                    <a target="_blank" class="btn btn-success my-4" href="#validador" role="button"><i class="far fa-check-circle"></i>
+                        Certificado Válido
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

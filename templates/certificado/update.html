@@ -79,7 +79,12 @@
                     {{ form.parceria }}
                 </div>
             </div>
-            <button class="btn btn-success mt-2 mb-4"><i class="far fa-save"></i> Salvar</button>
+            <div class="form-row d-flex justify-content-between">
+                <a class="btn btn-primary mt-2 mb-4" href="{{ request.META.HTTP_REFERER }}" role="button"><i class="fas fa-chevron-circle-left"></i>
+                    Voltar
+                </a>
+                <button class="btn btn-success mt-2 mb-4"><i class="far fa-save"></i> Salvar</button>
+            </div>
         </form>
 
     </div>

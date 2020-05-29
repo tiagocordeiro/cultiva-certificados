@@ -21,6 +21,8 @@ def gera_certificado(pk, slug):
     font_title = ImageFont.truetype(f'{templates_dir}/fontes/title.ttf', 48)
     font_body = ImageFont.truetype(f'{templates_dir}/fontes/body.ttf', 42)
 
+    tamanho_data = draw.textsize(certificado.date_string, font=font_title)
+
     draw.text(
         (1300, 1100),
         text=certificado.aluno,
@@ -43,15 +45,23 @@ def gera_certificado(pk, slug):
     )
 
     draw.text(
-        (1300, 1520),
-        text=f'{certificado.carga_horaria}h',
+        (1300, 1400),
+        text=certificado.get_modalidade_display(),
         fill='#3A317B',
         font=font_title
     )
 
     draw.text(
-        (1090, 2020),
-        text=certificado.date_string,
+        (1300, 1520),
+        text=f'{certificado.carga_horaria} horas',
+        fill='#3A317B',
+        font=font_title
+    )
+
+    draw.text(
+        (1620 - tamanho_data[0], 2020),
+        text=f'{certificado.date_string}.',
+        align='right',
         fill='#3A317B',
         font=font_title
     )
