@@ -1,5 +1,6 @@
 import locale
 import os
+import textwrap
 
 from PIL import Image, ImageDraw, ImageFont
 from django.utils.text import slugify
@@ -30,6 +31,13 @@ def gera_certificado(pk, slug):
 
     tamanho_data = draw.textsize(certificado.date_string, font=font_title)
 
+    texto = certificado.curso
+    if len(texto) > 50:
+        linhas = textwrap.wrap(texto, 50)
+
+    else:
+        linhas = [texto, certificado.get_modalidade_display()]
+
     draw.text(
         (1300, 1100),
         text=certificado.aluno,
@@ -46,14 +54,14 @@ def gera_certificado(pk, slug):
 
     draw.text(
         (1300, 1300),
-        text=certificado.curso,
+        text=linhas[0],
         fill='#3A317B',
         font=font_title
     )
 
     draw.text(
         (1300, 1400),
-        text=certificado.get_modalidade_display(),
+        text=linhas[1],
         fill='#3A317B',
         font=font_title
     )
