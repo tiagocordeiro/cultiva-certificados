@@ -27,7 +27,7 @@ def gera_certificado(pk, slug):
     certificado.date_string = certificado.data.strftime("%d de %B de %Y")
 
     font_title = ImageFont.truetype(f'{templates_dir}/fontes/title.ttf', 48)
-    font_body = ImageFont.truetype(f'{templates_dir}/fontes/body.ttf', 42)
+    # font_body = ImageFont.truetype(f'{templates_dir}/fontes/body.ttf', 42)
 
     tamanho_data = draw.textsize(certificado.date_string, font=font_title)
 
@@ -46,10 +46,10 @@ def gera_certificado(pk, slug):
     )
 
     draw.text(
-        (1300, 1200),
+        (1300, 1190),
         text=f'RG: {certificado.rg}',
         fill='#3A317B',
-        font=font_body
+        font=font_title
     )
 
     draw.text(
