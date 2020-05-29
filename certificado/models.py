@@ -16,11 +16,18 @@ class Certificado(Active, TimeStampedModel):
         (3, 'Prefeitura de Suzano'),
     )
 
+    MODALIDADE_CHOICES = (
+        (1, 'Atividade interativa'),
+        (2, 'EAD'),
+        (3, 'presencial'),
+    )
+
     aluno = models.CharField('Aluno', max_length=100)
     universidade = models.CharField('Universidade', max_length=50, blank=True)
     rg = models.CharField('RG', max_length=15, blank=True)
     cpf = models.CharField('CPF', max_length=15, blank=True)
     curso = models.TextField('Curso')
+    modalidade = models.IntegerField('Modalidade', choices=MODALIDADE_CHOICES)
     carga_horaria = models.IntegerField('Carga horária')
     data = models.DateField('Data')
     parceria = models.IntegerField('Parceria', choices=PARCERIA_CHOICES)

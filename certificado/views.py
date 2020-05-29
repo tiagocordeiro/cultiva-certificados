@@ -4,14 +4,14 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import FileResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
+from django.urls import reverse
 
 from .facade import gera_certificado
 from .forms import CertificadoForm
 from .models import Certificado
 
 
-# Create your views here.
 @login_required
 def lista_certificados(request):
     todos_certificados = Certificado.objects.all()
@@ -51,16 +51,46 @@ def novo_certificado(request):
 
 @login_required
 def atualiza_certificado(request, pk):
-    pass
+    certificado = get_object_or_404(Certificado, pk=pk)
+
+    if request.method == 'POST':
+        form = CertificadoForm(request.POST, instance=certificado)
+        try:
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Certificado atualizado")
+                return redirect('atualiza_certificado', pk)
+        except Exception as e:
+            messages.warning(request, f'Ocorreu um erro ao atualizar: {e}')
+
+    else:
+        form = CertificadoForm(instance=certificado)
+
+    return render(request, 'certificado/update.html', {'form': form})
 
 
 @login_required
 def compartilha_certificado(request, pk):
-    pass
+    certificado = get_object_or_404(Certificado, pk=pk)
+    url = request.build_absolute_uri(reverse('link_certificado',
+                                             kwargs={
+                                                 'pk': certificado.pk,
+                                                 'slug': certificado.slug}))
+
+    context = {
+        'certificado': certificado,
+        'url': url
+    }
+
+    return render(request, 'certificado/share.html', context)
 
 
 def link_certificado(request, pk, slug):
-    pass
+    certificado = get_object_or_404(Certificado, pk=pk, slug=slug)
+
+    contexto = {'certificado': certificado}
+
+    return render(request, 'certificado/public.html', context=contexto)
 
 
 def download_certificado(request, pk, slug, img_format='jpg'):
