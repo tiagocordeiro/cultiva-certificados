@@ -14,7 +14,14 @@ def gera_certificado(pk, slug):
     templates_dir = os.path.abspath(settings.BASE_DIR + '/templates/modelos/')
     certificado = Certificado.objects.get(pk=pk, slug=slug)
 
-    certificado.image = Image.open(f'{templates_dir}/certificado_base.png')
+    if certificado.parceria == 1:
+        modelo = 'certificado_parceiro_atens'
+    elif certificado.parceria == 2:
+        modelo = 'certificado_parceiro_flacso'
+    else:
+        modelo = 'certificado_base'
+
+    certificado.image = Image.open(f'{templates_dir}/{modelo}.png')
     draw = ImageDraw.Draw(certificado.image)
     certificado.date_string = certificado.data.strftime("%d de %B de %Y")
 
