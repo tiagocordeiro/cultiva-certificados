@@ -90,3 +90,52 @@ class CertificadoTestCase(TransactionTestCase):
         certificados = Certificado.objects.all()
         self.assertEqual(len(certificados), 2)
         self.assertEqual(Certificado.objects.count(), 2)
+
+    def teste_download_csv_exemplo_anonimo_status_code(self):
+        self.client.logout()
+        request = self.client.get(reverse('download_csv_example'))
+
+        self.assertEqual(request.status_code, 302)
+        self.assertRedirects(request,
+                             '/accounts/login/?next=/certificados/export/csv'
+                             '/exemplo/',
+                             status_code=302,
+                             target_status_code=200)
+
+    def teste_download_csv_exemplo_logado_status_code(self):
+        self.client.force_login(self.user_staff)
+        request = self.client.get(reverse('download_csv_example'))
+
+        self.assertEqual(request.status_code, 200)
+
+    def teste_download_csv_anonimo_status_code(self):
+        self.client.logout()
+        request = self.client.get(reverse('download_csv'))
+
+        self.assertEqual(request.status_code, 302)
+        self.assertRedirects(request,
+                             '/accounts/login/?next=/certificados/export/csv/',
+                             status_code=302,
+                             target_status_code=200)
+
+    def teste_download_csv_logado_status_code(self):
+        self.client.force_login(self.user_staff)
+        request = self.client.get(reverse('download_csv'))
+
+        self.assertEqual(request.status_code, 200)
+
+    def teste_upload_csv_anonimo_status_code(self):
+        self.client.logout()
+        request = self.client.get(reverse('upload_csv'))
+
+        self.assertEqual(request.status_code, 302)
+        self.assertRedirects(request,
+                             '/accounts/login/?next=/certificados/import/csv/',
+                             status_code=302,
+                             target_status_code=200)
+
+    def teste_upload_csv_logado_status_code(self):
+        self.client.force_login(self.user_staff)
+        request = self.client.get(reverse('upload_csv'))
+
+        self.assertEqual(request.status_code, 200)

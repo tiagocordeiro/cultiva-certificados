@@ -1,13 +1,15 @@
+import csv
 from io import BytesIO
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import FileResponse
-from django.shortcuts import redirect, render, get_object_or_404
+from django.shortcuts import redirect, render, get_object_or_404, HttpResponse
 from django.urls import reverse
 
-from .facade import gera_certificado
+from .facade import gera_certificado, data_from_csv, import_certificados
 from .forms import CertificadoForm
 from .models import Certificado
 
@@ -16,7 +18,7 @@ from .models import Certificado
 def lista_certificados(request):
     todos_certificados = Certificado.objects.all()
     pagina = request.GET.get('page', 1)
-    paginador = Paginator(todos_certificados, 10)
+    paginador = Paginator(todos_certificados, 5)
     try:
         certificados = paginador.page(pagina)
     except PageNotAnInteger:
@@ -110,3 +112,94 @@ def download_certificado(request, pk, slug, img_format='jpg'):
     response = FileResponse(byte, 'rb')
     response['Content-Disposition'] = f'attachment; filename={filename}'
     return response
+
+
+@login_required
+def download_csv_example(request):
+    certificados = Certificado.objects.all()
+
+    response = HttpResponse(content_type='text/csv')
+    content = 'attachment; filename="certificados_planilha_exemplo.csv"'
+    response['Content-Disposition'] = content
+
+    colunas = []
+    for key in certificados.values('aluno', 'universidade', 'rg', 'cpf',
+                                   'curso', 'modalidade', 'carga_horaria',
+                                   'data', 'parceria').first().keys():
+        colunas.append(key)
+
+    writer = csv.writer(response)
+    writer.writerow(colunas)
+
+    for certificado in certificados.values('aluno', 'universidade', 'rg',
+                                           'cpf', 'curso', 'modalidade',
+                                           'carga_horaria', 'data',
+                                           'parceria'):
+        colunas = []
+
+        for value in certificado.values():
+            colunas.append(value)
+
+        writer.writerow(colunas)
+
+    return response
+
+
+@login_required
+def download_csv(request):
+    certificados = Certificado.objects.all()
+
+    response = HttpResponse(content_type='text/csv')
+    content = 'attachment; filename="certificados.csv"'
+    response['Content-Disposition'] = content
+
+    colunas = []
+    for key in certificados.values('id', 'aluno', 'universidade', 'rg', 'cpf',
+                                   'curso', 'carga_horaria', 'data',
+                                   'parceria', 'slug').first().keys():
+        colunas.append(key)
+
+    colunas.append('url_download')
+    colunas[7] = 'data_emissao'
+
+    writer = csv.writer(response)
+    writer.writerow(colunas)
+
+    for certificado in certificados.values('id', 'aluno', 'universidade', 'rg',
+                                           'cpf', 'curso', 'carga_horaria',
+                                           'data', 'parceria', 'slug'):
+        colunas = []
+
+        for value in certificado.values():
+            colunas.append(value)
+
+        download_url = reverse('download_certificado',
+                               kwargs={'pk': certificado['id'],
+                                       'slug': certificado['slug']})
+        dominio_site = get_current_site(request).domain
+        url = ''.join(['https://', dominio_site, download_url])
+        colunas.append(url)
+
+        parceria = Certificado.objects.get(id=certificado['id'])
+        colunas[8] = parceria.get_parceria_display()
+
+        writer.writerow(colunas)
+
+    return response
+
+
+@login_required
+def upload_csv(request):
+    if request.method == 'POST' and request.FILES['myfile']:
+        csv_file = request.FILES['myfile'].file
+        csv_content = data_from_csv(csv_file)
+
+        resultado_importacao = import_certificados(csv_content)
+        messages.success(request, f"Processado {resultado_importacao}")
+
+        contexto = {'content': csv_content,
+                    'resultado_importacao': resultado_importacao}
+
+        return render(request, 'certificado/upload_csv.html', contexto)
+
+    return render(request, 'certificado/upload_csv.html')

@@ -4,6 +4,10 @@ from . import views
 
 urlpatterns = [
     path('certificados/', views.lista_certificados, name='lista_certificados'),
+    path('certificados/export/csv/', views.download_csv, name='download_csv'),
+    path('certificados/export/csv/exemplo/', views.download_csv_example,
+         name='download_csv_example'),
+    path('certificados/import/csv/', views.upload_csv, name='upload_csv'),
     path('certificado/novo/', views.novo_certificado, name='novo_certificado'),
     path('certificado/editar/<pk>/', views.atualiza_certificado,
          name='atualiza_certificado'),

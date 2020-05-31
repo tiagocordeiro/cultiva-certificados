@@ -38,7 +38,7 @@
                         <th scope="col">Aluno</th>
                         <th scope="col">Curso</th>
                         <th scope="col" style="text-align: center;">Parceiro</th>
-                        <th scope="col" style="text-align: center;">Data</th>
+                        <th scope="col" style="text-align: center;">Data emissão</th>
                         <th scope="col"></th>
                     </tr>
                     </thead>
@@ -67,7 +67,10 @@
                     {% endfor %}
                     </tbody>
                 </table>
-
+            </div>
+        </div>
+        <div class="row">
+            <div class="col md-6">
                 {#                {% if certificados.has_other_pages %}#}
                 <nav aria-label="Search results pages">
                     <ul class="pagination">
@@ -94,7 +97,9 @@
                     </ul>
                 </nav>
                 {#                {% endif %}#}
-
+            </div>
+            <div class="col md-6">
+                <a href="{% url 'download_csv' %}" class="btn btn-success float-right"><i class="fas fa-plus-circle"></i> Exportar</a>
             </div>
         </div>
     </div>
