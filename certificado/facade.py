@@ -1,3 +1,5 @@
+import csv
+import io
 import locale
 import os
 import textwrap
@@ -6,7 +8,7 @@ from PIL import Image, ImageDraw, ImageFont
 from django.utils.text import slugify
 
 from certgen import settings
-from .models import Certificado
+from .models import Certificado, make_slug
 
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
@@ -88,3 +90,41 @@ def gera_certificado(pk, slug):
 
 def gen_file_name(text: str):
     return slugify(text)
+
+
+def data_from_csv(csv_file):
+    csv_file = io.TextIOWrapper(csv_file)
+    dialect = csv.Sniffer().sniff(csv_file.read(1024), delimiters=";,")
+    csv_file.seek(0)
+    reader = csv.reader(csv_file, dialect)
+    return list(reader)
+
+
+def import_certificados(lista: list):
+    certificados_novos = []
+    certificados_existentes = []
+
+    for certificado in lista[1:]:
+        if Certificado.objects.filter(aluno__exact=certificado[0],
+                                      curso__exact=certificado[4]):
+            certificados_existentes.append(
+                {'aluno': certificado[0],
+                 'curso': certificado[4]}
+            )
+        else:
+            novo_certificado = Certificado(aluno=certificado[0],
+                                           universidade=certificado[1],
+                                           rg=certificado[2],
+                                           cpf=certificado[3],
+                                           curso=certificado[4],
+                                           modalidade=certificado[5],
+                                           carga_horaria=certificado[6],
+                                           data=certificado[7],
+                                           parceria=certificado[8],
+                                           slug=make_slug())
+            certificados_novos.append(novo_certificado)
+
+    if len(certificados_novos) >= 1:
+        Certificado.objects.bulk_create(certificados_novos)
+
+    return {'novos': certificados_novos, 'existentes': certificados_existentes}
