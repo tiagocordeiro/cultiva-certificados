@@ -16,11 +16,15 @@ locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 def gera_certificado(pk, slug):
     templates_dir = os.path.abspath(settings.BASE_DIR + '/templates/modelos/')
     certificado = Certificado.objects.get(pk=pk, slug=slug)
+    two_signtures = False
 
     if certificado.parceria == 1:
         modelo = 'certificado_parceiro_atens'
     elif certificado.parceria == 2:
         modelo = 'certificado_parceiro_flacso'
+    elif certificado.parceria == 4:
+        modelo = 'certificado_parceiro_atens_dir_rosario'
+        two_signtures = True
     else:
         modelo = 'certificado_base'
 
@@ -75,13 +79,22 @@ def gera_certificado(pk, slug):
         font=font_title
     )
 
-    draw.text(
-        (1620 - tamanho_data[0], 2020),
-        text=f'{certificado.date_string}.',
-        align='right',
-        fill='#3A317B',
-        font=font_title
-    )
+    if two_signtures:
+        draw.text(
+            (1250 - tamanho_data[0], 2020),
+            text=f'{certificado.date_string}.',
+            align='right',
+            fill='#3A317B',
+            font=font_title
+        )
+    else:
+        draw.text(
+            (1620 - tamanho_data[0], 2020),
+            text=f'{certificado.date_string}.',
+            align='right',
+            fill='#3A317B',
+            font=font_title
+        )
 
     certificado.file_name = gen_file_name(certificado.aluno)
 

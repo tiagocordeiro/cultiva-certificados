@@ -1,6 +1,7 @@
 # Django
-asgiref==3.2.7
-Django==3.0.7
+
+asgiref==3.2.10
+Django==3.0.8
 pytz==2020.1
 sqlparse==0.3.1
 
@@ -11,7 +12,7 @@ python-decouple==3.3
 dj-database-url==0.5.0
 
 # Pillow
-Pillow==7.1.2
+Pillow==7.2.0
 
 # Heroku
 django-heroku==0.3.1
@@ -21,11 +22,11 @@ psycopg2==2.8.5
 whitenoise==5.1.0
 
 # Cloudinary
-certifi==2020.4.5.1
+certifi==2020.6.20
 chardet==3.0.4
-cloudinary==1.21.0
-dj3-cloudinary-storage==0.0.1
-idna==2.9
-requests==2.23.0
+cloudinary==1.21.1
+dj3-cloudinary-storage==0.0.3
+idna==2.10
+requests==2.24.0
 six==1.15.0
 urllib3==1.25.9
