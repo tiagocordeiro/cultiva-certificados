@@ -12,6 +12,7 @@ def make_slug():
 class Certificado(Active, TimeStampedModel):
     PARCERIA_CHOICES = (
         (1, 'ATENS'),
+        (4, 'ATENS - Dir. Rosário'),
         (2, 'FLACSO'),
         (3, 'Prefeitura de Suzano'),
     )
