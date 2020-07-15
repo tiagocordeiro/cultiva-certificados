@@ -74,7 +74,7 @@ def gera_certificado(pk, slug):
 
     draw.text(
         (1300, 1520),
-        text=f'{certificado.carga_horaria} horas',
+        text=f'{certificado.carga_horaria}',
         fill='#3A317B',
         font=font_title
     )
