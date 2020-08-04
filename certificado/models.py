@@ -29,7 +29,7 @@ class Certificado(Active, TimeStampedModel):
     cpf = models.CharField('CPF', max_length=15, blank=True)
     curso = models.TextField('Curso')
     modalidade = models.IntegerField('Modalidade', choices=MODALIDADE_CHOICES)
-    carga_horaria = models.CharField('Carga horária', max_length=15)
+    carga_horaria = models.CharField('Carga horária', max_length=100)
     data = models.DateField('Data')
     parceria = models.IntegerField('Parceria', choices=PARCERIA_CHOICES)
     slug = models.UUIDField(unique=True, editable=False)
