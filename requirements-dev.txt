@@ -1,5 +1,5 @@
 # Code Style
-pycodestyle==2.6.0
+pycodestyle==2.9.1
 
 # Flake8
 flake8==3.8.3
