@@ -1,6 +1,6 @@
 # Django
 asgiref==3.2.10
-Django==3.2.2
+Django==5.1.2
 pytz==2020.1
 sqlparse==0.3.1
 
